@@ -1,16 +1,15 @@
-import { Box, List, ListItem, Typography } from "@mui/material";
+// import { Box, List, ListItem, Typography } from "@mui/material";
 import { Diagnosis, Entry  } from '../../types';
 import { useEffect, useState } from "react";
 import diagnosisService from "../../services/diagnosis";
+import HospitalEntry from "./HospitalEntry";
+import HealthCheck from "./HealthCheck";
+import OccupationalHealthcare from "./OccupationalHealthcare";
 
-interface Props {
-    entries : Entry[]
-}
-
-const PatientEntries = ({ entries }: Props) => {
+const PatientEntries: React.FC<{ entry: Entry} > = ({ entry }) => {
     const [diagnosis, setDiagnosis] = useState<Diagnosis[]>([]);
 
-    console.log(entries[0].type);
+    console.log(entry);
     useEffect(() => {
         const fetchDiagnosis = async () => {
             try {
@@ -22,39 +21,49 @@ const PatientEntries = ({ entries }: Props) => {
         };
         void fetchDiagnosis();
     },[]);
+
+    switch(entry.type) {
+        case "Hospital":
+            return <HospitalEntry entry={entry} diagnosis={diagnosis}/>;
+        case "HealthCheck":
+            return <HealthCheck entry={entry} diagnosis={diagnosis}/>;
+        case "OccupationalHealthcare":
+            return <OccupationalHealthcare entry={entry} diagnosis={diagnosis}/>;
+    }
     
-    return (
-        <Box>
-            <Typography align="left" variant="h5">
-                entries
-            </Typography>
-            <Typography>
-                {entries.map((entrie: Entry) => (
-                    <Typography key={entrie.id}>
-                        <Typography>
-                            <Typography variant="body1"><strong>{entrie.date}</strong> </Typography>
-                            <Typography variant="body1">{entrie.description}</Typography>
-                        </Typography>
-                        <Typography>
-                            <List sx={{ listStyleType: 'disc' }}>
-                                {
-                                entrie.diagnosisCodes?.map(code => (
-                                    <ListItem key={code} sx={{ display: 'list-item' }}>
-                                        {code}{" "}
-                                        {
-                                        diagnosis?.find((diagnose: Diagnosis) => 
-                                        diagnose.code === code)?.name
-                                        } 
-                                    </ListItem>
-                                ))
-                                }
-                            </List>
-                        </Typography>
-                    </Typography>
-                ))}
-            </Typography>
-        </Box>
-    );
+
+    // return (
+    //     <Box>
+    //         <Typography align="left" variant="h5">
+    //             entries
+    //         </Typography>
+    //         <Typography>
+    //             {/* {entry.map((entrie: Entry) => ( */}
+    //                 <Typography key={entry.id}>
+    //                     <Typography>
+    //                         <Typography variant="body1"><strong>{entry.date}</strong> </Typography>
+    //                         <Typography variant="body1">{entry.description}</Typography>
+    //                     </Typography>
+    //                     <Typography>
+    //                         <List sx={{ listStyleType: 'disc' }}>
+    //                             {
+    //                             entry.diagnosisCodes?.map(code => (
+    //                                 <ListItem key={code} sx={{ display: 'list-item' }}>
+    //                                     {code}{" "}
+    //                                     {
+    //                                     diagnosis?.find((diagnose: Diagnosis) => 
+    //                                     diagnose.code === code)?.name
+    //                                     } 
+    //                                 </ListItem>
+    //                             ))
+    //                             }
+    //                         </List>
+    //                     </Typography>
+    //                 </Typography>
+    //             {/* ))} */}
+    //         </Typography>
+    //     </Box>
+    // );
 };
 
 export default PatientEntries;

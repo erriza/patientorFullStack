@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
-import { Patient } from "../../types";
+import { Entry, Patient } from "../../types";
 import patientService from '../../services/patients';
 import { useEffect, useState } from "react";
-import { Box, Container, Typography, Divider } from "@mui/material";
+import {Button, Box, Container, Typography, Divider } from "@mui/material";
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import PatientEntries from "../PatientEntries";
@@ -33,13 +33,12 @@ const PatientInformationPage = () => {
         fetchPatient();
     }, [id]);
 
-
-    if (isLoading) { // Check if loading
+    if (isLoading) { 
         return <div>Loading patient data ...</div>; 
     }
 
-    if (!patient) { // Check for no patient after loading
-        return <div>Patient not found</div>; // Or handle this case appropriately
+    if (!patient) { 
+        return <div>Patient not found</div>; 
     }
 
     return (
@@ -64,7 +63,19 @@ const PatientInformationPage = () => {
                 occupation: {patient?.occupation}
             </Typography>
             <Divider orientation="horizontal" flexItem />
-            <PatientEntries entries={patient.entries}/>
+            <Box m={2}>
+                <Typography>
+                    entries
+                </Typography>
+                {/* <PatientEntries entries={patient.entries}/> */}
+                {
+                patient.entries.map((entry: Entry) => (
+                    <PatientEntries key={entry.id} entry={entry}/>
+                ))}
+            </Box>
+            <Button variant="contained" color="primary">
+                Add new entry
+            </Button>
         </Container>
     );
 };
