@@ -1,37 +1,60 @@
 import { SyntheticEvent, useState } from "react";
-import { Diagnosis, HealthCheckRating, NewEntryForm } from "../../../types";
-import { Button, FormControl, FormControlLabel, Grid, Radio, RadioGroup, TextField } from "@mui/material";
+import { Diagnosis, NewEntryForm } from "../../../types";
+import { Button, Grid, TextField } from "@mui/material";
 
 interface Props {
     onCancel: ()=> void;
     onSubmit: (values: NewEntryForm) => void;
-    id?: string;
+    id?: string
 }
 
-const AddHealthCheckEntryForm = ({ onCancel, onSubmit, id }: Props) => {
+interface DischargeData {
+    date: string;
+    criteria: string;
+  }
+  
+const AddHospitalEntryForm = ({ onCancel, onSubmit, id }: Props) => {
     const [description, setDescription] = useState<string>('');
     const [date, setDate] = useState<string>('');
     const [specialist, setSpecialist] = useState<string>('');
     const [diagnosisCodes, setDiagnosisCodes] = useState<Array<Diagnosis['code']>>([]);
-    const [healthCheckRating, setHealthCheckRating] = useState<HealthCheckRating>(HealthCheckRating["Healthy"]); 
+    const [discharge, setDischarge] = useState<DischargeData>({
+        date: '',
+        criteria: '',
+    });
+
+
+    const handleDischargeDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setDischarge((prevState) => ({
+            ...prevState,
+            date: event.target.value
+        }));
+    };
+
+    const handleDischargeDateCriteria = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setDischarge((prevState) => ({
+            ...prevState,
+            criteria: event.target.value
+        }));
+    };
+    
+    const addHospitalEntry = (event: SyntheticEvent) => {
+        event.preventDefault();
+        onSubmit({
+            id: entryId,
+            description,
+            date,
+            specialist,
+            diagnosisCodes,
+            type: "Hospital",
+            discharge
+        });
+    };
 
     const entryId = id || '';
-
-    const addEntry = (event: SyntheticEvent) => {
-      event.preventDefault();
-      onSubmit({
-        id: entryId,
-        description,
-        date,
-        specialist,
-        diagnosisCodes,
-        type: "HealthCheck",
-        healthCheckRating,
-      });
-    };
-    return (
+    return(
         <div>
-            <form onSubmit={addEntry}>
+            <form onSubmit={addHospitalEntry}>
                 <TextField
                     label="Description"
                     fullWidth
@@ -58,36 +81,18 @@ const AddHealthCheckEntryForm = ({ onCancel, onSubmit, id }: Props) => {
                         setDiagnosisCodes(prevDiagnosisCodes => [...prevDiagnosisCodes, target.value]); 
                       }}
                 />
-                <FormControl>
-                    <RadioGroup
-                        aria-labelledby="health-check-rating-group-label"
-                        name="health-check-rating"
-                        value={healthCheckRating}
-                        onChange={(event) => setHealthCheckRating(Number(event.target.value as unknown as HealthCheckRating))}                    
-                        >
-                        <FormControlLabel
-                        value={HealthCheckRating["Healthy"]}
-                        control={<Radio />}
-                        label="Healthy"
-                        />
-                        <FormControlLabel
-                        value={HealthCheckRating["LowRisk"]}
-                        control={<Radio />}
-                        label="Low Risk"
-                        />
-                        <FormControlLabel
-                        value={HealthCheckRating["HighRisk"]}
-                        control={<Radio />}
-                        label="High Risk"
-                        />
-                        <FormControlLabel
-                        value={HealthCheckRating["CriticalRisk"]}
-                        control={<Radio />}
-                        label="Critical Risk"
-                        />
-                        
-                    </RadioGroup>
-                </FormControl>
+                <TextField
+                    label="Discharge Date"
+                    fullWidth
+                    value={discharge.date}
+                    onChange={handleDischargeDateChange}
+                />
+                <TextField
+                    label="Discharge Criteria"
+                    fullWidth
+                    value={discharge.criteria}
+                    onChange={handleDischargeDateCriteria}
+                />
                 <Grid>
                     <Grid item>
                     <Button
@@ -115,4 +120,4 @@ const AddHealthCheckEntryForm = ({ onCancel, onSubmit, id }: Props) => {
     );
 };
 
-export default AddHealthCheckEntryForm;
+export default AddHospitalEntryForm;
