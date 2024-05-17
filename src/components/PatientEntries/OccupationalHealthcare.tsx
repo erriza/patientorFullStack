@@ -9,9 +9,7 @@ interface Props {
 }
 
 const OccupationalHealthcare = ({ entry, diagnosis }: Props) => {
-    console.log('from hospital entry', entry);
-    console.log('from hospital entry', diagnosis);
-
+    
     return (
         <Container>
             <Card variant="outlined" style={{padding: "20px"}}>

@@ -9,9 +9,6 @@ interface Props {
 
 
 const HospitalEntry = ({ entry, diagnosis }: Props) => {
-    console.log('from hospital entry', entry);
-    console.log('from hospital entry', diagnosis);
-
 
     return (
         <Container>

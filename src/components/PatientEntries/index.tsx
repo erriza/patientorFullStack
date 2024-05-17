@@ -21,7 +21,7 @@ const PatientEntries: React.FC<{ entry: Entry} > = ({ entry }) => {
         };
         void fetchDiagnosis();
     },[]);
-
+    
     switch(entry.type) {
         case "Hospital":
             return <HospitalEntry entry={entry} diagnosis={diagnosis}/>;

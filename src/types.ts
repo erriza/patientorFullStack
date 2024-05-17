@@ -23,7 +23,7 @@ export interface Patient {
 export type PatientFormValues = Omit<Patient, "id" | "entries">;
 
 interface BaseEntry {
-  id: string;
+  id?: string;
   description: string;
   date: string;
   specialist: string;
@@ -58,3 +58,11 @@ export type Entry =
 | HospitalEntry
 | OccupationalHealthcareEntry
 | HealthCheckEntry;
+
+// type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+
+export type NewEntryForm = 
+| (HospitalEntry & { id: string }) 
+| (OccupationalHealthcareEntry & { id: string })
+| (HealthCheckEntry & { id: string });
+  // export type NewEntryForm = Entry;

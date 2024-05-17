@@ -7,8 +7,6 @@ interface Props {
     diagnosis: Diagnosis[]
 }
 const HealthCheck = ({ entry, diagnosis }: Props) => {
-    console.log('from healtcheck entry', entry);
-    console.log('from healtchec entry', diagnosis);
 
     return (
         <Container>
