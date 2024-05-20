@@ -1,6 +1,6 @@
 import { SyntheticEvent, useState } from "react";
 import { Diagnosis, NewEntryForm } from "../../../types";
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, FormControl, Grid, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
 
 interface Props {
     onCancel: ()=> void;
@@ -23,6 +23,23 @@ const AddHospitalEntryForm = ({ onCancel, onSubmit, id }: Props) => {
         criteria: '',
     });
 
+    const codes = [
+        'M24.2',
+        'S03.5',
+        'M51.2',
+        'J10.1',
+        'J06.9',
+        'Z57.1',
+        'N30.0',
+        'H54.7',
+        'J03.0',
+        'L60.1',
+        'Z74.3',
+        'L20',
+        'F43.2',
+        'S62.5',
+        'H35.29'
+    ];
 
     const handleDischargeDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setDischarge((prevState) => ({
@@ -37,6 +54,15 @@ const AddHospitalEntryForm = ({ onCancel, onSubmit, id }: Props) => {
             criteria: event.target.value
         }));
     };
+
+    const handleDiagnosisChange = (event: SelectChangeEvent<typeof diagnosisCodes>) => {
+        const {
+          target: { value },
+        } = event;
+        setDiagnosisCodes(
+          typeof value === 'string' ? value.split(',') : value,
+        );
+      };
     
     const addHospitalEntry = (event: SyntheticEvent) => {
         event.preventDefault();
@@ -56,38 +82,55 @@ const AddHospitalEntryForm = ({ onCancel, onSubmit, id }: Props) => {
         <div>
             <form onSubmit={addHospitalEntry}>
                 <TextField
+                    style={{ margin: "0.5rem"}}
                     label="Description"
                     fullWidth
                     value={description}
                     onChange={({ target }) => setDescription(target.value)}
                 />
                 <TextField
+                    style={{ margin: "0.5rem"}}
                     label="Date"
                     fullWidth
                     value={date}
                     onChange={({ target }) => setDate(target.value)}
                 />
                 <TextField
+                    style={{ margin: "0.5rem"}}
                     label="Specialist"
                     fullWidth
                     value={specialist}
                     onChange={({ target }) => setSpecialist(target.value)}
                 />
+                <FormControl fullWidth
+                    style={{ margin: "0.5rem"}}
+                    >
+                        <InputLabel id="multiple-diagnosiscodes">Diagnosis Codes</InputLabel>
+                        <Select
+                            labelId="multiple-diagnosiscodes"
+                            multiple
+                            value={diagnosisCodes}
+                            onChange={handleDiagnosisChange}
+                        >
+                            {codes.map((code) => (
+                                <MenuItem
+                                    key={code}
+                                    value={code}
+                                >
+                                    {code}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                </FormControl>
                 <TextField
-                    label="DiagnosisCodes"
-                    fullWidth
-                    value={diagnosisCodes}
-                    onChange={({ target }) => {
-                        setDiagnosisCodes(prevDiagnosisCodes => [...prevDiagnosisCodes, target.value]); 
-                      }}
-                />
-                <TextField
+                    style={{ margin: "0.5rem"}}
                     label="Discharge Date"
                     fullWidth
                     value={discharge.date}
                     onChange={handleDischargeDateChange}
                 />
                 <TextField
+                    style={{ margin: "0.5rem"}}
                     label="Discharge Criteria"
                     fullWidth
                     value={discharge.criteria}

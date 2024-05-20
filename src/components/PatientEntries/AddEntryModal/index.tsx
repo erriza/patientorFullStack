@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle, DialogContent, Divider, Alert, Button } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, Divider, Alert, Button, Box } from '@mui/material';
 import { NewEntryForm } from "../../../types";
 import AddHealthCheckEntryForm from './AddEntryForm';
 import { useState } from 'react';
@@ -36,18 +36,18 @@ const AddEntryModal = ({ modalOpen, onClose, onSubmit, error, id }: Props) => {
 
     return (
         <Dialog fullWidth={true} open={modalOpen} onClose={onClose}>
-            <DialogTitle>New HealthCheck Entry</DialogTitle>
+            <DialogTitle>New Entry</DialogTitle>
             <Divider />
             <DialogContent>
                 {error && <Alert severity="error">{error}</Alert>}
                 <Button  variant='contained' onClick={openHealthCheckModal}>
                     HealthCheck Entry
                 </Button>
-                <Divider />
+                <Box style={{margin: "0.5rem"}}/>
                 <Button  variant='contained' onClick={openHospitalModal}>
                     Hospital Entry
                 </Button>
-                <Divider />
+                <Box style={{margin: "0.5rem"}}/>
                 <Button  variant='contained' onClick={openOccupationalModal}>
                     OccupationalHealthcare Entry
                 </Button>
