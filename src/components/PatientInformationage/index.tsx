@@ -45,7 +45,7 @@ const PatientInformationPage = () => {
         setError(undefined);
     };
 
-    const submitNewPatient = async (values: NewEntryForm) => {
+    const submitNewEntry = async (values: NewEntryForm) => {
         try {
             const entry = await patientService.createEntry(values);
             const updatePatient = {
@@ -104,7 +104,6 @@ const PatientInformationPage = () => {
                 <Typography>
                     entries
                 </Typography>
-                {/* <PatientEntries entries={patient.entries}/> */}
                 {
                 patient.entries.map((entry: Entry) => (
                     <PatientEntries key={entry.id} entry={entry}/>
@@ -112,7 +111,7 @@ const PatientInformationPage = () => {
             </Box>
             <AddEntryModal
                 modalOpen={modalOpen}
-                onSubmit={submitNewPatient}
+                onSubmit={submitNewEntry}
                 error={error}
                 onClose={closeModal}
                 id={id}

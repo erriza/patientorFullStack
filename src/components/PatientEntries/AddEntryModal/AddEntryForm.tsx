@@ -1,6 +1,9 @@
 import { SyntheticEvent, useState } from "react";
 import { Diagnosis, HealthCheckRating, NewEntryForm } from "../../../types";
-import { Button, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { Button, FormControl, FormControlLabel, Grid,Radio, RadioGroup, TextField } from "@mui/material";
+import MultipleSelectInput from "./Multiple-Select/MultipleSelectInput";
+import DatePickerComponent from "./DatePicker/DatePicker";
+import dayjs from "dayjs";
 
 interface Props {
     onCancel: ()=> void;
@@ -10,47 +13,19 @@ interface Props {
 
 const AddHealthCheckEntryForm = ({ onCancel, onSubmit, id }: Props) => {
     const [description, setDescription] = useState<string>('');
-    const [date, setDate] = useState<string>('');
+    const [date, setDate] = useState<dayjs.Dayjs>(dayjs());
     const [specialist, setSpecialist] = useState<string>('');
     const [diagnosisCodes, setDiagnosisCodes] = useState<Array<Diagnosis['code']>>([]);
     const [healthCheckRating, setHealthCheckRating] = useState<HealthCheckRating>(HealthCheckRating["Healthy"]); 
 
-    const codes = [
-        'M24.2',
-        'S03.5',
-        'M51.2',
-        'J10.1',
-        'J06.9',
-        'Z57.1',
-        'N30.0',
-        'H54.7',
-        'J03.0',
-        'L60.1',
-        'Z74.3',
-        'L20',
-        'F43.2',
-        'S62.5',
-        'H35.29'
-
-    ];
-
     const entryId = id || '';
-
-    const handleDiagnosisChange = (event: SelectChangeEvent<typeof diagnosisCodes>) => {
-      const {
-        target: { value },
-      } = event;
-      setDiagnosisCodes(
-        typeof value === 'string' ? value.split(',') : value,
-      );
-    };
 
     const addEntry = (event: SyntheticEvent) => {
       event.preventDefault();
       onSubmit({
         id: entryId,
         description,
-        date,
+        date: date.format('YYYY-MM-DD'),
         specialist,
         diagnosisCodes,
         type: "HealthCheck",
@@ -68,12 +43,9 @@ const AddHealthCheckEntryForm = ({ onCancel, onSubmit, id }: Props) => {
                     value={description}
                     onChange={({ target }) => setDescription(target.value)}
                 />
-                <TextField
-                    style={{ margin: "0.5rem"}}
-                    label="Date"
-                    fullWidth
-                    value={date}
-                    onChange={({ target }) => setDate(target.value)}
+                <DatePickerComponent
+                    date={date}
+                    setDate={setDate}
                 />
                 <TextField
                     style={{ margin: "0.5rem"}}
@@ -82,26 +54,10 @@ const AddHealthCheckEntryForm = ({ onCancel, onSubmit, id }: Props) => {
                     value={specialist}
                     onChange={({ target }) => setSpecialist(target.value)}
                 />
-                <FormControl fullWidth
-                    style={{ margin: "0.5rem"}}
-                    >
-                        <InputLabel id="multiple-diagnosiscodes">Diagnosis Codes</InputLabel>
-                        <Select
-                            labelId="multiple-diagnosiscodes"
-                            multiple
-                            value={diagnosisCodes}
-                            onChange={handleDiagnosisChange}
-                        >
-                            {codes.map((code) => (
-                                <MenuItem
-                                    key={code}
-                                    value={code}
-                                >
-                                    {code}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                <MultipleSelectInput
+                    diagnosisCodes={diagnosisCodes}
+                    setDiagnosisCodes={setDiagnosisCodes}
+                />
                 <FormControl 
                     style={{ margin: "0.5rem"}}
                     >

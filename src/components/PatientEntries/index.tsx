@@ -9,7 +9,6 @@ import OccupationalHealthcare from "./OccupationalHealthcare";
 const PatientEntries: React.FC<{ entry: Entry} > = ({ entry }) => {
     const [diagnosis, setDiagnosis] = useState<Diagnosis[]>([]);
 
-    console.log(entry);
     useEffect(() => {
         const fetchDiagnosis = async () => {
             try {
